@@ -1,34 +1,35 @@
 import React from "react"
-import characters from "../data/characters.json"
 import planets from "../data/planets.json"
 
-const OurTable = () => {
-    return (
+const OurTable = ({ characters }) => {
+  return (
     <table>
-        <th>
-            Name
-        </th>
-        <th>
-            Planet
-        </th>
-        <OurTableRows />
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Planet</th>
+        </tr>
+      </thead>
+      <tbody>
+        <OurTableRows characters={characters} />
+      </tbody>
     </table>
+  )
+}
+
+const OurTableRows = ({ characters }) => {
+  const planetsDict = planets.results.reduce((dict, planet) => {
+    dict[planet.url] = planet
+    return dict
+  }, {})
+  return characters.map((character, index) => {
+    return (
+      <tr key={index}>
+        <td>{character.name}</td>
+        <td>{planetsDict[character.homeworld]?.name}</td>
+      </tr>
     )
+  })
 }
 
-const OurTableRows = () => {
-    const planetsDict = planets.results.reduce((dict, planet) => {
-        dict[planet.url] = planet
-        return dict
-    }, {})
-    return characters.results.map(character => {
-        return (<tr>
-            <td>{character.name}</td>
-            <td>
-                {planetsDict[character.homeworld]?.name}
-            </td>
-        </tr>)
-    })
-}
-
-export default OurTable
+export default OurTable;
